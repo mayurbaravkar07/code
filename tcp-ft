@@ -1,0 +1,77 @@
+
+
+import java.net.*;
+import java.io.*;
+
+
+public class client {
+    public static void main(String[] args) throws Exception{
+       
+       // InetAddress.getByName("localhost")
+        Socket socket=new Socket("localhost",5000);
+        byte[] contents=new byte[10000];
+        
+        //Initialise the file output stream to the output files full path
+        FileOutputStream fos=new FileOutputStream("/home/mayur/Desktop/ad/mayur.txt");
+        BufferedOutputStream bos= new BufferedOutputStream(fos);
+        InputStream is=socket.getInputStream(); 
+        
+        int bytesRead=0;
+        while ((bytesRead=is.read(contents))!=-1) {
+            
+            bos.write(contents,0,bytesRead);
+            
+        }
+        bos.flush();
+        socket.close();
+        System.out.println("File saved Successfully");
+    }
+    }
+    
+    
+    
+    import java.net.*;
+import java.io.*;
+public class server {
+    public static void main(String[] args) throws Exception{
+        ServerSocket stk =new ServerSocket(5000);
+        Socket socket=stk.accept();
+        
+        InetAddress IA =InetAddress.getByName("localhost");
+        
+        //File path
+        File file=new File("/home/mayur/Desktop/ftp/mayur.txt");
+        FileInputStream fis=new FileInputStream(file);
+        BufferedInputStream bis=new BufferedInputStream(fis);
+        
+        OutputStream os=socket.getOutputStream();
+        
+        ///Reaf file contents in array
+        byte[] contents;
+        long fileLength =file.length();
+        System.out.println(fileLength);
+        long current=0;
+        
+        long start=System.nanoTime();
+        while(current!=fileLength){
+             int size=10000;
+             if (fileLength-current>=size) {
+                current=current+size;
+            }else{
+                 size=(int)(fileLength-current);
+                 current =fileLength;
+             }
+             contents=new byte[size];
+             bis.read(contents,0,size);
+             os.write(contents);
+             System.out.println("Sending fle..."+(current*100)/fileLength+"% COMPLETE");
+             
+        }
+        os.flush();
+        // CLOSING SOCKET
+         socket.close();
+        stk.close();
+       
+        System.out.println("File Sent Succesfully");
+    }
+    }
