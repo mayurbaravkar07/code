@@ -1,0 +1,63 @@
+import java.net.*;
+import java.io.*;
+
+
+ public class Client{
+
+    public static void main(String[] args)throws Exception{
+       
+        Socket stk=new Socket("localhost",2000);
+        
+       BufferedReader keyb= new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br=new BufferedReader(new InputStreamReader(stk.getInputStream()));
+        PrintStream ps=new PrintStream(stk.getOutputStream());
+       
+        String msg="";
+        String msg1="";
+        while (!msg.equals("end")){            
+            msg=keyb.readLine();
+            ps.println(msg);
+      
+            msg1=br.readLine();
+            System.out.println("From Server:-"+" "+msg1);
+           
+        } 
+        stk.close();
+    }
+
+   
+
+}
+
+
+import java.net.*;
+import java.io.*;
+public class SocketProgramming {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws Exception {
+     ServerSocket ss=new ServerSocket(2000);
+     Socket stk=ss.accept();
+     BufferedReader keyb= new BufferedReader(new InputStreamReader(System.in));
+     BufferedReader br=new BufferedReader(new InputStreamReader(stk.getInputStream()));
+     PrintStream ps=new PrintStream(stk.getOutputStream());
+     
+     String msg="";
+      String msg1="";
+     
+     
+       while(!msg.equals("end")){    
+        msg=br.readLine();
+        System.out.println("From Client:-"+" "+msg);
+        
+        msg=keyb.readLine();
+         ps.println(msg);
+              
+         
+        }
+
+   stk.close();
+}
+}
