@@ -1,0 +1,64 @@
+import java.io.*;
+import java.sql.SQLOutput;
+public class subnet {
+public static void main(String args[]) throws IOException
+{
+System.out.print("Enter IP:");
+BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
+String IP= br.readLine();
+System.out.println("IP is "+ IP);
+String oct1=IP.substring(0,3);
+int i= Integer.parseInt(oct1);
+//System.out.print(i);
+String mask=null;
+if (i>=0 && i<=127)
+{
+System.out.println("IP address belongs to CLASS A");
+mask="255.0.0.0";
+System.out.println("mask : "+mask);
+}
+else if(i>=128 && i<=191)
+{
+System.out.println("IP address belongs to CLASS B");
+mask="255.255.0.0";
+System.out.println("mask : "+mask);
+}
+else if(i>=191 && i<=223)
+{
+System.out.println("IP address belongs to CLASS C");
+mask="255.255.255.0";
+System.out.println("mask : "+mask);
+}
+else if(i>=224 && i<=239)
+{
+System.out.println("IP address belongs to CLASS D");
+mask="255.0.0.0";
+System.out.println("mask : "+mask);
+}
+else if(i>=240 && i<=255)
+{
+System.out.println("IP address belongs to CLASS E");
+mask="255.0.0.0";
+System.out.println("mask : "+mask);
+}
+String network_address="";
+String brodcast_address="";
+//String[] IP_address_parts=IP.split("\\.");
+String[] IP_address_parts=IP.split("\\.");
+//String[] mask_part
+String[] mask_parts=mask.split("\\.");
+for (i=0;i<4;i++)
+{
+int oct_part_IP=Integer.parseInt(IP_address_parts[i]);
+int oct_part_mask=Integer.parseInt(mask_parts[i]);
+int bitwise_add=oct_part_IP&oct_part_mask;
+//System.out.println("bitwise adding is: "+ bitwise_add);
+network_address += bitwise_add + ".";
+int bitwise_or=bitwise_add|(oct_part_mask^255);
+brodcast_address+=bitwise_or+".";
+//System.out.println("bitwise or is: "+ bitwise_or);
+}
+System.out.println("network address is :"+ network_address);
+System.out.println("broadcast address is :"+ brodcast_address);
+}
+}
